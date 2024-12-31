@@ -1466,7 +1466,7 @@ run(function()
 	Mode = TriggerBot:CreateDropdown({
 		Name = 'Mode',
 		List = {'Mouse', 'Player'},
-		Tooltip = 'Mouse - Uses your mouse to calculate the attacks\nPlayer - Uses your players position'
+		Tooltip = 'Mouse - Uses your mouse to hit the target\nPlayer - Uses the position of the player to hit at the target'
 	})
 	CPS = TriggerBot:CreateTwoSlider({
 		Name = 'CPS',

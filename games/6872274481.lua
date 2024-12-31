@@ -1428,7 +1428,7 @@ run(function()
 							local localPos = entitylib.character.RootPart.Position
 							local rayRange = (attackRange or 14.4)
 							local ray = bedwars.QueryUtil:raycast(unit.Origin, unit.Direction * 200, rayParams)
-							if ray and (localPos - ray.Instance.Position).Magnitude <= rayRange then 
+							if Mode.Value == 'Mouse' and ray and (localPos - ray.Instance.Position).Magnitude <= rayRange then 
 								local limit = (attackRange)
 								for _, ent in entitylib.List do 
 									doAttack = ray.Instance:IsDescendantOf(ent.Character) and (localPos - ent.RootPart.Position).Magnitude <= rayRange
@@ -1436,6 +1436,13 @@ run(function()
 										break
 									end
 								end
+							elseif Mode.Value == 'Player' then
+								for _, ent in entitylib.List do
+                                    doAttack = (localPos - ent.RootPart.Position).Magnitude <= rayRange
+                                    if doAttack then
+                                        break
+                                    end
+                                end
 							end
 	
 							doAttack = doAttack or bedwars.SwordController:getTargetInRegion(attackRange or 3.8 * 3, 0)
@@ -1450,6 +1457,10 @@ run(function()
 			end
 		end,
 		Tooltip = 'Automatically swings when hovering over a entity'
+	})
+	Mode = TriggerBot:CreateDropdown({
+		Name = 'Mode',
+		List = {'Mouse', 'Player'}
 	})
 	CPS = TriggerBot:CreateTwoSlider({
 		Name = 'CPS',

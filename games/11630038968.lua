@@ -55,7 +55,7 @@ run(function()
 		Knit = Knit,
 		Entity = require(replicatedStorage.Modules.Entity),
 		ServerData = require(replicatedStorage.Modules.ServerData),
-		ViewmodelController = require(replicatedStorage.Modules.ViewmodelController)
+		ViewmodelController = require(replicatedStorage.Modules.ViewmodelController),
 	}, {
 		__index = function(self, ind)
 			rawset(self, ind, ind:find('Service') and Knit.GetService(ind) or Knit.GetController(ind))

@@ -1437,7 +1437,7 @@ run(function()
 								end
 							elseif Mode.Value == 'Player' then
 								for _, ent in entitylib.List do
-                                    doAttack = (localPos - ent.RootPart.Position).Magnitude <= rayRange
+                                    doAttack = (localPos - ent.RootPart.Position + ent.Character.Humanoid.MoveDirection).Magnitude <= rayRange
                                     if doAttack then
                                         break
                                     end
@@ -1447,10 +1447,10 @@ run(function()
 							doAttack = doAttack or bedwars.SwordController:getTargetInRegion(attackRange or 3.8 * 3, 0)
 							if doAttack and Mode.Value == 'Player' then
 								for _, ent in entitylib.List do
-									bedwars.SwordController:swingSwordAtMouse(ent.RootPart.Position)
+									bedwars.SwordController:swingSwordAtMouse(ent.RootPart.Position + ent.Character.Humanoid.MoveDirection)
 								end
 							elseif doAttack and Mode.Value == 'Mouse' then
-								bedwars.SwordController:swingSwordAtMouse()
+								bedwars.SwordController:swingSwordAtMouse(ray.Instance.Position)
 							end
 						end
 					end

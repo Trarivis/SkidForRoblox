@@ -320,13 +320,9 @@ run(function()
 									SwingDelay = tick() + 0.25
 									entitylib.character.Humanoid.Animator:LoadAnimation(tool.Animations.Swing):Play()
 									
-									if setthreadidentity then
-										setthreadidentity(2)
-										bd.ViewmodelController:PlayAnimation(tool.Name)
-										setthreadidentity(8)
-									else
-										bd.ViewmodelController:PlayAnimation(tool.Name)
-									end
+									setthreadidentity(2)
+									bd.ViewmodelController:PlayAnimation(tool.Name)
+									setthreadidentity(8)
 								end
 	
 								if delta.Magnitude > AttackRange.Value then continue end

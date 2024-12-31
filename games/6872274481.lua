@@ -1429,7 +1429,6 @@ run(function()
 							local rayRange = (attackRange or 14.4)
 							local ray = bedwars.QueryUtil:raycast(unit.Origin, unit.Direction * 200, rayParams)
 							if Mode.Value == 'Mouse' and ray and (localPos - ray.Instance.Position).Magnitude <= rayRange then 
-								local limit = (attackRange)
 								for _, ent in entitylib.List do 
 									doAttack = ray.Instance:IsDescendantOf(ent.Character) and (localPos - ent.RootPart.Position).Magnitude <= rayRange
 									if doAttack then 
@@ -1446,7 +1445,11 @@ run(function()
 							end
 	
 							doAttack = doAttack or bedwars.SwordController:getTargetInRegion(attackRange or 3.8 * 3, 0)
-							if doAttack then 
+							if doAttack and Mode.Value == 'Player' then
+								for _, ent in entitylib.List do
+									bedwars.SwordController:swingSwordAtMouse(ent.RootPart.Position)
+								end
+							elseif doAttack and Mode.Value == 'Mouse' then
 								bedwars.SwordController:swingSwordAtMouse()
 							end
 						end

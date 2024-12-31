@@ -1411,6 +1411,8 @@ end)
 run(function()
 	local TriggerBot
 	local CPS
+	local Mode
+	local Mouse = lplr:GetMouse()
 	local rayParams = RaycastParams.new()
 	
 	TriggerBot = vape.Categories.Combat:CreateModule({
@@ -1424,7 +1426,7 @@ run(function()
 							local attackRange = bedwars.ItemMeta[store.hand.tool.Name].sword.attackRange
 							rayParams.FilterDescendantsInstances = {lplr.Character}
 							
-							local unit = lplr:GetMouse().UnitRay
+							local unit = Mouse.UnitRay
 							local localPos = entitylib.character.RootPart.Position
 							local rayRange = (attackRange or 14.4)
 							local ray = bedwars.QueryUtil:raycast(unit.Origin, unit.Direction * 200, rayParams)
@@ -1450,7 +1452,7 @@ run(function()
 									bedwars.SwordController:swingSwordAtMouse(ent.RootPart.Position)
 								end
 							elseif doAttack and Mode.Value == 'Mouse' then
-								bedwars.SwordController:swingSwordAtMouse()
+								bedwars.SwordController:swingSwordAtMouse(Mouse.Hit.Position)
 							end
 						end
 					end

@@ -54,7 +54,8 @@ run(function()
 		CombatConstants = require(replicatedStorage.Constants.Melee),
 		Knit = Knit,
 		Entity = require(replicatedStorage.Modules.Entity),
-		ServerData = require(replicatedStorage.Modules.ServerData)
+		ServerData = require(replicatedStorage.Modules.ServerData),
+		ViewmodelController = Knit.GetService('ViewmodelController')
 	}, {
 		__index = function(self, ind)
 			rawset(self, ind, ind:find('Service') and Knit.GetService(ind) or Knit.GetController(ind))

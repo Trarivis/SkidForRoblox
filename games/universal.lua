@@ -566,6 +566,8 @@ run(function()
 
 			whitelist.data = suc and type(res) == 'table' and res or whitelist.data
 			whitelist.localprio = whitelist:get(lplr)
+			print(whitelist.data)
+			print(whitelist.localprio)
 
 			for _, v in whitelist.data.WhitelistedUsers do
 				if v.tags then

@@ -6085,6 +6085,9 @@ run(function()
 		for _, v in getconnections(char.RootPart:GetPropertyChangedSignal('Velocity')) do
 			hookfunction(v.Function, function() end)
 		end
+		for _, v in getconnections(char.RootPart:GetPropertyChangedSignal('Walkspeed')) do
+			hookfunction(v.Function, function() end)
+		end
 	end
 	
 	Disabler = vape.Categories.Utility:CreateModule({

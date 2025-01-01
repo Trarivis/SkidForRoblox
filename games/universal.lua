@@ -6091,10 +6091,12 @@ run(function()
 		Name = 'Disabler',
 		Function = function(callback)
 			if callback then
-				Disabler:Clean(entitylib.Events.LocalAdded:Connect(characterAdded))
-				if entitylib.isAlive then
-					characterAdded(entitylib.character)
-				end
+				repeat task.wait()
+					Disabler:Clean(entitylib.Events.LocalAdded:Connect(characterAdded))
+					if entitylib.isAlive then
+						characterAdded(entitylib.character)
+					end
+				until not Disabler.Enabled
 			end
 		end,
 		Tooltip = 'Disables GetPropertyChangedSignal detections for movement'

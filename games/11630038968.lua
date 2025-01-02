@@ -272,7 +272,7 @@ run(function()
 			if ClickDelay < tick() then return false end
 		end
 		
-		return getTool()
+		return true
 	end
 	
 	Killaura = vape.Categories.Blatant:CreateModule({

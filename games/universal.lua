@@ -501,12 +501,13 @@ run(function()
 				vape:Clean(exp:FindFirstChild('RCTScrollContentView', true).ChildAdded:Connect(function(obj)
 					local plr = playersService:GetPlayerByUserId(tonumber(obj.Name:split('-')[1]) or 0)
 					obj = obj:FindFirstChild('TextMessage', true)
-					if obj then
+					if obj and obj:IsA('TextLabel') then
 						if plr then
 							self:newchat(obj, plr, true)
 							obj:GetPropertyChangedSignal('Text'):Wait()
 							self:newchat(obj, plr)
 						end
+
 						if obj.ContentText:sub(1, 35) == 'You are now privately chatting with' then
 							obj.Visible = false
 						end
@@ -560,6 +561,7 @@ run(function()
 			if not first then
 				whitelist.olddata = isfile('skid/profiles/whitelist.json') and readfile('skid/profiles/whitelist.json') or nil
 			end
+			
 			local suc, res = pcall(function()
 				return httpService:JSONDecode(whitelist.textdata)
 			end)

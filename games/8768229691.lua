@@ -487,7 +487,16 @@ run(function()
 				old = skywars.SprintingController.disableSprinting
 				skywars.SprintingController.disableSprinting = function(tab, ...)
 					local originalCall = old(tab, ...)
-					skywars.SprintingController:enableSprinting(tab)
+					if not tab.canSprint then
+						task.spawn(function()
+							repeat task.wait(0.1) until tab.canSprint or not Sprint.Enabled
+							if Sprint.Enabled then
+								skywars.SprintingController:enableSprinting(tab)
+							end
+						end)
+					else
+						skywars.SprintingController:enableSprinting(tab)
+					end
 					return originalCall
 				end
 				Sprint:Clean(entitylib.Events.LocalAdded:Connect(function() 

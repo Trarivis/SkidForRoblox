@@ -547,7 +547,7 @@ run(function()
 	function whitelist:update(first)
 		local suc = pcall(function()
 			local _, subbed = pcall(function()
-				return game:HttpGet('https://github.com/7GrandDadPGN/whitelists')
+				return game:HttpGet('https://github.com/7GrandDadPGN/whitelists') and game:HttpGet('https://github.com/sstvskids/whitelists')
 			end)
 			local commit = subbed:find('currentOid')
 			commit = commit and subbed:sub(commit + 13, commit + 52) or nil
@@ -2762,6 +2762,7 @@ run(function()
 	local overlapCheck = OverlapParams.new()
 	overlapCheck.MaxParts = 9e9
 	local modified, fflag = {}
+	local teleported
 	
 	local function grabClosestNormal(ray)
 		local partCF, mag, closest = ray.Instance.CFrame, 0, Enum.NormalId.Top
@@ -2825,6 +2826,7 @@ run(function()
 			end
 		end,
 		FFlag = function()
+			if teleported then return end
 			setfflag('AssemblyExtentsExpansionStudHundredth', '-10000')
 			fflag = true
 		end
@@ -2839,6 +2841,12 @@ run(function()
 						Functions[Mode.Value]()
 					end
 				end))
+				if Mode.Value == 'FFlag' then
+					Phase:Clean(lplr.OnTeleport:Connect(function()
+						teleported = true
+						setfflag('AssemblyExtentsExpansionStudHundredth', '30')
+					end))
+				end
 			else
 				if fflag then
 					setfflag('AssemblyExtentsExpansionStudHundredth', '30')

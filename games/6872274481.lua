@@ -617,7 +617,7 @@ end)
 entitylib.start()
 
 run(function()
-	local KnitInit, Knit
+	--[[local KnitInit, Knit
 	repeat
 		KnitInit, Knit = pcall(function()
 			return debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6)
@@ -628,6 +628,15 @@ run(function()
 
 	if not debug.getupvalue(Knit.Start, 1) then
 		repeat task.wait() until debug.getupvalue(Knit.Start, 1)
+	end--]]
+
+	local getRemote = function(Name)
+		for i, v in pairs(game:GetDescendants()) do
+			if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") and v.Name == Name then
+				return v
+			end
+		end
+		return Instance.new("RemoteEvent")
 	end
 
 	local Flamework = require(replicatedStorage['rbxts_include']['node_modules']['@flamework'].core.out).Flamework
@@ -682,15 +691,14 @@ run(function()
 		QueueMeta = require(replicatedStorage.TS.game['queue-meta']).QueueMeta,
 		Roact = require(replicatedStorage['rbxts_include']['node_modules']['@rbxts']['roact'].src),
 		RuntimeLib = require(replicatedStorage['rbxts_include'].RuntimeLib),
-		Shop = require(replicatedStorage.TS.games.bedwars.shop['bedwars-shop']).BedwarsShop,
-		ShopItems = debug.getupvalue(debug.getupvalue(require(replicatedStorage.TS.games.bedwars.shop['bedwars-shop']).BedwarsShop.getShopItem, 1), 2),
 		SoundList = require(replicatedStorage.TS.sound['game-sound']).GameSound,
 		SoundManager = require(replicatedStorage['rbxts_include']['node_modules']['@easy-games']['game-core'].out).SoundManager,
 		Store = require(lplr.PlayerScripts.TS.ui.store).ClientStore,
 		TeamUpgradeMeta = debug.getupvalue(require(replicatedStorage.TS.games.bedwars['team-upgrade']['team-upgrade-meta']).getTeamUpgradeMeta, 1),
 		UILayers = require(replicatedStorage['rbxts_include']['node_modules']['@easy-games']['game-core'].out).UILayers,
 		VisualizerUtils = require(lplr.PlayerScripts.TS.lib.visualizer['visualizer-utils']).VisualizerUtils,
-		WeldTable = require(replicatedStorage.TS.util['weld-util']).WeldUtil
+		WeldTable = require(replicatedStorage.TS.util['weld-util']).WeldUtil,
+		WinEffectMeta = require(replicatedStorage.TS.locker['win-effect']['win-effect-meta']).WinEffectMeta
 	}, {
 		__index = function(self, ind)
 			rawset(self, ind, Knit.Controllers[ind])
@@ -754,22 +762,7 @@ run(function()
 	Client.Get = function(self, remoteName)
 		local call = OldGet(self, remoteName)
 
-		if remoteName == remotes.AckKnockback then
-			return {
-				instance = call.instance,
-				SendToServer = function(_, knockback)
-					if not StoreDamage.Enabled then
-						return call:SendToServer(knockback)
-					end
-
-					local damage = debug.getstack(3, 3)
-					if damage.knockbackId and (not damage.knockbackMultiplier or not damage.knockbackMultiplier.disabled) then
-						table.insert(store.damage, damage)
-						vapeEvents.KnockbackReceived:Fire()
-					end
-				end
-			}
-		elseif remoteName == remotes.AttackEntity then
+		if remoteName == remotes.AttackEntity then
 			return {
 				instance = call.instance,
 				SendToServer = function(_, attackTable, ...)
@@ -1039,10 +1032,6 @@ run(function()
 		end)
 	end
 
-	vape:Clean(vapeEvents.KnockbackReceived.Event:Connect(function()
-		notif('StoreDamage', 'Added damage packet: '..#store.damage, 3)
-	end))
-
 	store.blocks = collection('block', gui)
 	store.shop = collection({'BedwarsItemShop', 'TeamUpgradeShopkeeper'}, gui, function(tab, obj)
 		table.insert(tab, {
@@ -1064,9 +1053,6 @@ run(function()
 	local beds = sessioninfo:AddItem('Beds')
 	local wins = sessioninfo:AddItem('Wins')
 	local games = sessioninfo:AddItem('Games')
-	sessioninfo:AddItem('Packets', 0, function()
-		return #store.damage
-	end, false)
 
 	local mapname = 'Unknown'
 	sessioninfo:AddItem('Map', 0, function()
@@ -1129,9 +1115,11 @@ run(function()
 		if getthreadidentity and setthreadidentity then
 			local old = getthreadidentity()
 			setthreadidentity(2)
+
 			bedwars.Shop = require(replicatedStorage.TS.games.bedwars.shop['bedwars-shop']).BedwarsShop
 			bedwars.ShopItems = debug.getupvalue(debug.getupvalue(bedwars.Shop.getShopItem, 1), 2)
 			bedwars.Shop.getShopItem('iron_sword', lplr)
+
 			setthreadidentity(old)
 			store.shopLoaded = true
 		else
@@ -1139,6 +1127,7 @@ run(function()
 				repeat
 					task.wait(0.1)
 				until vape.Loaded == nil or bedwars.AppController:isAppOpen('BedwarsItemShopApp')
+
 				bedwars.Shop = require(replicatedStorage.TS.games.bedwars.shop['bedwars-shop']).BedwarsShop
 				bedwars.ShopItems = debug.getupvalue(debug.getupvalue(bedwars.Shop.getShopItem, 1), 2)
 				store.shopLoaded = true

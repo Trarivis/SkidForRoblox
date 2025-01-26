@@ -457,6 +457,7 @@ do
 		tab = tab or self.tweens
 		if tab[obj] then
 			tab[obj]:Cancel()
+			tab[obj] = nil
 		end
 
 		if obj.Parent and obj.Visible then
@@ -2085,6 +2086,7 @@ components = {
 			Index = getTableSize(api.Options)
 		}
 		
+		local hovered = false
 		local toggle = Instance.new('TextButton')
 		toggle.Name = optionsettings.Name..'Toggle'
 		toggle.Size = UDim2.new(1, 0, 0, 30)
@@ -2111,7 +2113,6 @@ components = {
 		knob.Position = UDim2.fromOffset(2, 2)
 		knob.BackgroundColor3 = uipallet.Main
 		knob.Parent = knobholder
-		local hovered = false
 		optionsettings.Function = optionsettings.Function or function() end
 		
 		function optionapi:Save(tab)
@@ -2832,6 +2833,7 @@ function mainapi:CreateGUI()
 				Index = getTableSize(optionapi.Toggles)
 			}
 
+			local hovered = false
 			local toggle = Instance.new('TextButton')
 			toggle.Name = togglesettings.Name..'Toggle'
 			toggle.Size = UDim2.new(1, 0, 0, 40)
@@ -2880,7 +2882,6 @@ function mainapi:CreateGUI()
 				togglesettings.Function(self.Enabled)
 			end
 
-			local hovered = false
 			scale:GetPropertyChangedSignal('Scale'):Connect(function()
 				toggle.Text = string.rep(' ', 33 * scale.Scale)..togglesettings.Name
 			end)
@@ -3671,6 +3672,7 @@ function mainapi:CreateCategory(categorysettings)
 			Category = categorysettings.Name
 		}
 
+		local hovered = false
 		local modulebutton = Instance.new('TextButton')
 		modulebutton.Name = modulesettings.Name
 		modulebutton.Size = UDim2.fromOffset(220, 40)
@@ -3871,7 +3873,6 @@ function mainapi:CreateCategory(categorysettings)
 		dotsbutton.MouseButton2Click:Connect(function()
 			modulechildren.Visible = not modulechildren.Visible
 		end)
-		local hovered = false
 		modulebutton.MouseEnter:Connect(function()
 			hovered = true
 			if not moduleapi.Enabled and not modulechildren.Visible then
@@ -4864,6 +4865,24 @@ function mainapi:CreateSearch()
 				button.MouseButton1Click:Connect(function()
 					v:Toggle()
 				end)
+
+				button.MouseButton2Click:Connect(function()
+					v.Object.Parent.Parent.Visible = true
+					local frame = v.Object.Parent
+					local highlight = Instance.new('Frame')
+					highlight.Size = UDim2.fromScale(1, 1)
+					highlight.BackgroundColor3 = Color3.new(1, 1, 1)
+					highlight.BackgroundTransparency = 0.6
+					highlight.BorderSizePixel = 0
+					highlight.Parent = v.Object
+					tween:Tween(highlight, TweenInfo.new(0.5), {
+						BackgroundTransparency = 1
+					})
+					task.delay(0.5, highlight.Destroy, highlight)
+
+					frame.CanvasPosition = Vector2.new(0, (v.Object.LayoutOrder * 40) - (math.min(frame.CanvasSize.Y.Offset, 600) / 2))
+				end)
+
 				button.Parent = children
 				task.spawn(function()
 					repeat

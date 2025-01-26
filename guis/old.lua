@@ -363,7 +363,9 @@ do
 		tab = tab or self.tweens
 		if tab[obj] then
 			tab[obj]:Cancel()
+			tab[obj] = nil
 		end
+
 		if obj.Parent and obj.Visible then
 			tab[obj] = tweenService:Create(obj, tweeninfo, goal)
 			tab[obj].Completed:Once(function()

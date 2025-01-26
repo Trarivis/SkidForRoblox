@@ -633,7 +633,7 @@ end)
 entitylib.start()
 
 run(function()
-	local KnitInit, Knit
+	--[[local KnitInit, Knit
 	repeat
 		KnitInit, Knit = pcall(function()
 			return debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6)
@@ -644,6 +644,15 @@ run(function()
 
 	if not debug.getupvalue(Knit.Start, 1) then
 		repeat task.wait() until debug.getupvalue(Knit.Start, 1)
+	end--]]
+
+	local getRemote = function(Name)
+		for i, v in pairs(game:GetDescendants()) do
+			if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") and v.Name == Name then
+				return v
+			end
+		end
+		return Instance.new("RemoteEvent")
 	end
 
 	local Flamework = require(replicatedStorage['rbxts_include']['node_modules']['@flamework'].core.out).Flamework
